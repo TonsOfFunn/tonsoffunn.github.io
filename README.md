@@ -43,9 +43,21 @@ ___
 
 horizontal rule
 
+___
+
 **TABLE**
+
 | Syntax | Description |
 | ----------- | ----------- |
 | Header | Title |
 | Paragraph | Text |
 
+**FENCED CODE BLOCK**
+
+```
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
