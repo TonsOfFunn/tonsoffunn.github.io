@@ -61,3 +61,44 @@ ___
   "age": 25
 }
 ```
+
+**FOOTNOTE**
+
+Here's a sentence with a footnote. [^1]
+
+[^1]: This is the footnote.
+
+**HEADING ID**
+
+### My Great Heading {#custom-id}
+
+**DEFINITION LIST**
+
+term
+: definition
+
+**STRIKETHROUGH**
+
+~~The world is flat.~~
+
+**TASK LIST**
+
+- [x] write press release
+- [ ] update website
+- [ ] contact media
+
+**EMOJI**
+
+That is so funny! :laughing: :joy:
+
+**HIGHLIGHT**
+
+I need to highlight these ==very important words==.
+
+**SUBSCRIPT**
+
+H~2~0
+
+**SUPERSCRIPT**
+
+X^2^
