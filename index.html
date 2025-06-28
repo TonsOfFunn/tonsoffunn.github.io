@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Matrix rain background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .matrix-char {
+            position: absolute;
+            color: #00ff41;
+            font-size: 14px;
+            animation: matrix-fall 3s linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px #00ff41;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 1rem;
+            opacity: 0;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px #00ff41;
+            }
+            to {
+                text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41;
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #00cc33;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 7.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 8s forwards;
+        }
+
+        .nav-link {
+            color: #00ff41;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid #00ff41;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 20px #00ff41;
+            transform: translateY(-2px);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        /* Main content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Projects section */
+        .projects-section {
+            margin: 4rem 0;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 8.5s forwards;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 15px #00ff41;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+            border-color: #00cc33;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .project-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #00ff41;
+        }
+
+        .project-description {
+            color: #00cc33;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-link {
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #00cc33;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .project-link::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid #00ff41;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 9s forwards;
+        }
+
+        .footer-text {
+            color: #00cc33;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOut 1s ease-out 6s forwards;
+            overflow: hidden;
+        }
+
+        .loading-text {
+            font-size: 2rem;
+            color: #00ff41;
+            animation: pulse 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Matrix Digital Rain */
+        .matrix-rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.2;
+            white-space: pre;
+            animation: matrixFall 4s linear infinite;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        @keyframes matrixFall {
+            0% {
+                transform: translateY(-100%);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Position columns across the screen */
+        .matrix-column:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .matrix-column:nth-child(2) { left: 15%; animation-delay: 0.2s; }
+        .matrix-column:nth-child(3) { left: 25%; animation-delay: 0.4s; }
+        .matrix-column:nth-child(4) { left: 35%; animation-delay: 0.6s; }
+        .matrix-column:nth-child(5) { left: 45%; animation-delay: 0.8s; }
+        .matrix-column:nth-child(6) { left: 55%; animation-delay: 1s; }
+        .matrix-column:nth-child(7) { left: 65%; animation-delay: 1.2s; }
+        .matrix-column:nth-child(8) { left: 75%; animation-delay: 1.4s; }
+        .matrix-column:nth-child(9) { left: 85%; animation-delay: 1.6s; }
+        .matrix-column:nth-child(10) { left: 95%; animation-delay: 1.8s; }
+
+        /* Glitch effect for authenticity */
+        .matrix-column::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #00ff41;
+            animation: glitch 0.3s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+        }
+
+        /* Loading text with ephemeral matrix style */
+        .loading-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.6rem;
+            color: #00ff41;
+            text-shadow: 0 0 15px #00ff41, 0 0 25px #00ff41;
+            animation: ephemeralPulse 3s ease-in-out infinite;
+            position: relative;
+            z-index: 10;
+            background: none;
+            padding: 0;
+            border: none;
+            backdrop-filter: none;
+            opacity: 0.9;
+        }
+
+        @keyframes ephemeralPulse {
+            0%, 100% {
+                opacity: 0.9;
+                text-shadow: 0 0 15px #00ff41, 0 0 25px #00ff41;
+            }
+            50% {
+                opacity: 0.4;
+                text-shadow: 0 0 25px #00ff41, 0 0 35px #00ff41, 0 0 45px #00ff41;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+</head>
+<body>
+    <!-- Loading screen -->
+    <div class="loading">
+        <div class="matrix-rain-container" id="matrixRainContainer">
+            <!-- Matrix rain columns will be generated by JavaScript -->
+        </div>
+        <div class="loading-text">...INITIALIZING MATRIX HUB...</div>
+    </div>
+
+    <!-- Matrix background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="title">WELCOME TO THE MATRIX HUB</h1>
+        <p class="subtitle">...a digital realm of innovation...</p>
+        
+        <nav class="nav">
+            <a href="#about" class="nav-link">./ABOUT</a>
+            <a href="#projects" class="nav-link">./SOFTWARES</a>
+            <a href="#contact" class="nav-link">./CONTACT</a>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+        <!-- About Section -->
+        <section id="about" class="projects-section">
+            <h2 class="section-title">./ABOUT</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3 class="project-title">WHO AM I</h3>
+                    <p class="project-description">
+                        A passionate developer who loves creating innovative solutions and exploring the boundaries of technology. 
+                        I specialize in web development, machine learning, and building user-centric applications that make a difference.
+                    </p>
+                    <div class="project-link">DEVELOPER • INNOVATOR • PROBLEM SOLVER</div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">SKILLS & TECHNOLOGIES</h3>
+                    <p class="project-description">
+                        Frontend: React, Vue.js, TypeScript, CSS3, HTML5<br>
+                        Backend: Node.js, Python, SQL, NoSQL<br>
+                        DevOps: Docker, AWS, CI/CD, Git<br>
+                        AI/ML: TensorFlow, PyTorch, Scikit-learn
+                    </p>
+                    <div class="project-link">ALWAYS LEARNING • ALWAYS GROWING</div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">MISSION</h3>
+                    <p class="project-description">
+                        To create technology that enhances human experience, solves real-world problems, 
+                        and pushes the boundaries of what's possible in the digital realm.
+                    </p>
+                    <div class="project-link">BUILDING THE FUTURE • ONE PROJECT AT A TIME</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section">
+            <h2 class="section-title">./SOFTWARES</h2>
+            <div class="projects-grid">
+                <!-- Project Template 1 -->
+                <div class="project-card">
+                    <h3 class="project-title">ALPHA</h3>
+                    <p class="project-description">
+                        A modern browser extension for managing your daily tasks with a playful otter theme!
+                    </p>
+                    <a href="https://tonsoffunn.github.io/todo-browser-ext/" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+
+                <!-- Project Template 2 -->
+                <div class="project-card">
+                    <h3 class="project-title">BETA</h3>
+                    <p class="project-description">
+                        A powerful Discord bot that fetches memes from Reddit with advanced features and modern design.
+                    </p>
+                    <a href="https://tonsoffunn.github.io/discord-meme-fetcher-bot/" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+
+                <!-- Project Template 3 -->
+                <div class="project-card">
+                    <h3 class="project-title">GAMMA</h3>
+                    <p class="project-description">
+                        A responsive design system with advanced UI components and seamless user experience.
+                    </p>
+                    <a href="https://project-gamma.yourusername.github.io" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+
+                <!-- Project Template 4 -->
+                <div class="project-card">
+                    <h3 class="project-title">DELTA</h3>
+                    <p class="project-description">
+                        A machine learning interface with intuitive controls and powerful computational capabilities.
+                    </p>
+                    <a href="https://project-delta.yourusername.github.io" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+
+                <!-- Project Template 5 -->
+                <div class="project-card">
+                    <h3 class="project-title">EPSILON</h3>
+                    <p class="project-description">
+                        A blockchain-based application demonstrating decentralized technology and secure transactions.
+                    </p>
+                    <a href="https://project-epsilon.yourusername.github.io" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+
+                <!-- Project Template 6 -->
+                <div class="project-card">
+                    <h3 class="project-title">ZETA</h3>
+                    <p class="project-description">
+                        A mobile-first progressive web app with offline capabilities and native-like performance.
+                    </p>
+                    <a href="https://project-zeta.yourusername.github.io" class="project-link" target="_blank">
+                        EXPLORE SOFTWARE
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="projects-section">
+            <h2 class="section-title">./CONTACT</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3 class="project-title">GITHUB</h3>
+                    <p class="project-description">
+                        Explore my open-source projects, contributions, and coding journey. 
+                        From small utilities to complex applications, see what I've been building.
+                    </p>
+                    <a href="https://github.com/TonsOfFunn" class="project-link" target="_blank">
+                        VISIT GITHUB
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">LINKEDIN</h3>
+                    <p class="project-description">
+                        Connect with me professionally, view my experience, and stay updated 
+                        with my latest achievements and professional milestones.
+                    </p>
+                    <a href="#" class="project-link" target="_blank">
+                        CONNECT ON LINKEDIN
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">EMAIL</h3>
+                    <p class="project-description">
+                        Ready to collaborate on exciting projects? Have questions about my work? 
+                        Let's discuss opportunities and ideas that could change the world.
+                    </p>
+                    <a href="mailto:contact@example.com" class="project-link">
+                        SEND MESSAGE
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">TWITTER</h3>
+                    <p class="project-description">
+                        Follow my thoughts on technology, development insights, and occasional 
+                        behind-the-scenes glimpses of my coding adventures.
+                    </p>
+                    <a href="#" class="project-link" target="_blank">
+                        FOLLOW ON TWITTER
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">PORTFOLIO</h3>
+                    <p class="project-description">
+                        A comprehensive showcase of my best work, detailed case studies, 
+                        and the stories behind the projects that define my journey.
+                    </p>
+                    <a href="#" class="project-link" target="_blank">
+                        VIEW PORTFOLIO
+                    </a>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">BLOG</h3>
+                    <p class="project-description">
+                        Technical articles, tutorials, and insights about web development, 
+                        emerging technologies, and lessons learned from building software.
+                    </p>
+                    <a href="#" class="project-link" target="_blank">
+                        READ BLOG
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            © 2025 Matrix Hub | Built with ❤️ by TonsOfFunn
+        </p>
+    </footer>
+
+    <script>
+        // Matrix rain effect
+        function createMatrixRain() {
+            const matrixBg = document.getElementById('matrixBg');
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+            
+            function createChar() {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.left = Math.random() * 100 + '%';
+                char.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                char.style.animationDelay = Math.random() * 2 + 's';
+                
+                matrixBg.appendChild(char);
+                
+                // Remove character after animation
+                setTimeout(() => {
+                    if (char.parentNode) {
+                        char.parentNode.removeChild(char);
+                    }
+                }, 5000);
+            }
+            
+            // Create characters periodically
+            setInterval(createChar, 100);
+            
+            // Initial characters
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createChar, i * 50);
+            }
+        }
+
+        // Matrix Digital Rain for Loading Screen
+        function createMatrixDigitalRain() {
+            const container = document.getElementById('matrixRainContainer');
+            const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            // Clear any existing content
+            container.innerHTML = '';
+            
+            // Create 10 columns of falling characters
+            for (let i = 0; i < 10; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                
+                // Generate random characters for this column
+                let columnText = '';
+                for (let j = 0; j < 30; j++) {
+                    columnText += matrixChars[Math.floor(Math.random() * matrixChars.length)] + '\n';
+                }
+                
+                column.textContent = columnText;
+                column.setAttribute('data-text', columnText);
+                
+                container.appendChild(column);
+            }
+            
+            console.log('Matrix digital rain created with', container.children.length, 'columns');
+        }
+
+        // Initialize Matrix digital rain on loading screen
+        window.addEventListener('load', () => {
+            createMatrixDigitalRain();
+            
+            // Start background matrix rain after loading screen fades
+            setTimeout(createMatrixRain, 7000); // 6s loading + 1s fade = 7s total
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add typing effect to title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.textContent = '';
+            element.style.opacity = '1';
+            element.style.transition = 'opacity 0.5s ease-in';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect after loading
+        setTimeout(() => {
+            const title = document.querySelector('.title');
+            const originalText = title.textContent;
+            typeWriter(title, originalText, 150);
+        }, 7500);
+    </script>
+</body>
+</html> 
