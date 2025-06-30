@@ -3,179 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Hub</title>
+    <title>🌐 Matrix Hub 🌐</title>
     <style>
+        /* ===== GLOBAL STYLES ===== */
+        /* Reset all default margins and padding, use border-box sizing */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Main body styling - sets the overall theme and font */
         body {
-            font-family: 'Courier New', monospace;
-            background: #0a0a0a;
-            color: #00ff41;
-            overflow-x: hidden;
-            line-height: 1.6;
+            font-family: 'Courier New', monospace; /* Matrix-style monospace font */
+            background: #0a0a0a; /* Very dark background */
+            color: #00ff41; /* Matrix green color */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            line-height: 1.6; /* Better readability */
         }
 
-        /* Matrix rain background */
+        /* ===== MATRIX RAIN BACKGROUND ===== */
+        /* Container for the falling matrix characters in the background */
         .matrix-bg {
-            position: fixed;
+            position: fixed; /* Fixed position so it stays in place when scrolling */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            opacity: 0.1;
+            z-index: 0; /* Changed from -1 to 0 to be behind content but more visible */
+            opacity: 0.3; /* Increased from 0.1 to 0.3 for more pronounced effect */
         }
 
+        /* Individual falling matrix characters */
         .matrix-char {
-            position: absolute;
-            color: #00ff41;
-            font-size: 14px;
-            animation: matrix-fall 3s linear infinite;
+            position: absolute; /* Positioned absolutely within matrix-bg */
+            color: #00ff41; /* Matrix green */
+            font-size: 16px; /* Increased from 14px for more visibility */
+            animation: matrix-fall 3s linear infinite; /* CSS animation for falling effect */
+            text-shadow: 0 0 8px #00ff41; /* Added glow effect for more visibility */
         }
 
+        /* Keyframes for the falling animation */
         @keyframes matrix-fall {
             0% {
-                transform: translateY(-100vh);
+                transform: translateY(-100vh); /* Start above the viewport */
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh);
-                opacity: 0;
+                transform: translateY(100vh); /* End below the viewport */
+                opacity: 0; /* Fade out as it falls */
             }
         }
 
-        /* Header */
+        /* ===== HEADER SECTION ===== */
+        /* Main header container */
         .header {
             text-align: center;
-            padding: 4rem 2rem 2rem;
+            padding: 4rem 2rem 2rem; /* Top, sides, bottom padding */
             position: relative;
+            z-index: 1; /* Ensure header content is above the matrix rain */
         }
 
+        /* Main title styling with glow effect */
         .title {
             font-size: 3.5rem;
             font-weight: bold;
-            text-shadow: 0 0 20px #00ff41;
-            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px #00ff41; /* Green glow effect */
+            animation: glow 2s ease-in-out infinite alternate; /* Pulsing glow animation */
             margin-bottom: 1rem;
-            opacity: 0;
+            opacity: 0; /* Start invisible, will be animated in by JavaScript */
         }
 
+        /* Glow animation keyframes */
         @keyframes glow {
             from {
-                text-shadow: 0 0 20px #00ff41;
+                text-shadow: 0 0 20px #00ff41; /* Normal glow */
             }
             to {
-                text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41;
+                text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41; /* Enhanced glow */
             }
         }
 
+        /* Subtitle styling */
         .subtitle {
             font-size: 1.2rem;
-            color: #00cc33;
+            color: #00cc33; /* Slightly darker green */
             margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 7.5s forwards;
+            opacity: 0; /* Start invisible */
+            animation: fadeInUp 1s ease-out 7.5s forwards; /* Animate in after 7.5s */
         }
 
+        /* Fade in animation from bottom */
         @keyframes fadeInUp {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0); /* Move to final position */
             }
         }
 
-        /* Navigation */
+        /* ===== NAVIGATION ===== */
+        /* Navigation container */
         .nav {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 2rem; /* Space between nav links */
             margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 8s forwards;
+            opacity: 0; /* Start invisible */
+            animation: fadeInUp 1s ease-out 8s forwards; /* Animate in after 8s */
         }
 
+        /* Individual navigation links */
         .nav-link {
             color: #00ff41;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border: 1px solid #00ff41;
+            border: 1px solid #00ff41; /* Green border */
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; /* Smooth transitions */
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* For the sliding effect */
         }
 
+        /* Hover effects for nav links */
         .nav-link:hover {
-            background: #00ff41;
-            color: #000;
-            box-shadow: 0 0 20px #00ff41;
-            transform: translateY(-2px);
+            background: #00ff41; /* Green background on hover */
+            color: #000; /* Black text on green background */
+            box-shadow: 0 0 20px #00ff41; /* Glow effect */
+            transform: translateY(-2px); /* Slight lift effect */
         }
 
+        /* Sliding light effect on hover */
         .nav-link::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: -100%; /* Start off-screen */
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
-            transition: left 0.5s;
+            transition: left 0.5s; /* Smooth sliding animation */
         }
 
         .nav-link:hover::before {
-            left: 100%;
+            left: 100%; /* Slide across the link */
         }
 
-        /* Main content */
+        /* ===== MAIN CONTENT ===== */
+        /* Main content container */
         .main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+            max-width: 1200px; /* Maximum width for readability */
+            margin: 0 auto; /* Center the content */
+            padding: 0 2rem; /* Side padding */
         }
 
-        /* Projects section */
+        /* ===== PROJECTS/SECTIONS STYLING ===== */
+        /* Container for each section (About, Projects, Contact) */
         .projects-section {
-            margin: 4rem 0;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 8.5s forwards;
+            margin: 4rem 0; /* Vertical spacing between sections */
+            opacity: 0; /* Start invisible */
+            animation: fadeInUp 1s ease-out 8.5s forwards; /* Animate in after 8.5s */
         }
 
+        /* Section titles */
         .section-title {
             font-size: 2.5rem;
             text-align: center;
             margin-bottom: 3rem;
-            text-shadow: 0 0 15px #00ff41;
+            text-shadow: 0 0 15px #00ff41; /* Green glow */
         }
 
+        /* Grid layout for cards */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 2rem; /* Space between cards */
             margin-top: 2rem;
         }
 
+        /* Individual card styling */
         .project-card {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid #00ff41;
+            background: rgba(0, 255, 65, 0.05); /* Very subtle green background */
+            border: 1px solid #00ff41; /* Green border */
             border-radius: 8px;
             padding: 2rem;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; /* Smooth transitions */
             position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            overflow: hidden; /* For the sliding effect */
+            cursor: pointer; /* Indicates it's interactive */
         }
 
+        /* Hover effects for cards */
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
-            border-color: #00cc33;
+            transform: translateY(-5px); /* Lift effect */
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3); /* Green shadow */
+            border-color: #00cc33; /* Darker border on hover */
         }
 
+        /* Sliding light effect on card hover */
         .project-card::before {
             content: '';
             position: absolute;
@@ -184,14 +208,15 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
+            transform: translateX(-100%); /* Start off-screen */
+            transition: transform 0.6s; /* Smooth sliding animation */
         }
 
         .project-card:hover::before {
-            transform: translateX(100%);
+            transform: translateX(100%); /* Slide across the card */
         }
 
+        /* Card title styling */
         .project-title {
             font-size: 1.5rem;
             font-weight: bold;
@@ -199,12 +224,14 @@
             color: #00ff41;
         }
 
+        /* Card description text */
         .project-description {
-            color: #00cc33;
+            color: #00cc33; /* Slightly darker green */
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
 
+        /* Card link styling */
         .project-link {
             color: #00ff41;
             text-decoration: none;
@@ -215,75 +242,82 @@
             transition: all 0.3s ease;
         }
 
+        /* Hover effects for links */
         .project-link:hover {
             color: #00cc33;
-            text-shadow: 0 0 10px #00ff41;
+            text-shadow: 0 0 10px #00ff41; /* Glow effect */
         }
 
+        /* Arrow animation on link hover */
         .project-link::after {
-            content: '→';
             transition: transform 0.3s ease;
         }
 
         .project-link:hover::after {
-            transform: translateX(5px);
+            transform: translateX(5px); /* Move arrow right */
         }
 
-        /* Footer */
+        /* ===== FOOTER ===== */
+        /* Footer container */
         .footer {
             text-align: center;
             padding: 3rem 2rem;
             margin-top: 4rem;
-            border-top: 1px solid #00ff41;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 9s forwards;
+            border-top: 1px solid #00ff41; /* Green top border */
+            opacity: 0; /* Start invisible */
+            animation: fadeInUp 1s ease-out 9s forwards; /* Animate in after 9s */
         }
 
+        /* Footer text styling */
         .footer-text {
             color: #00cc33;
         }
 
-        /* Responsive design */
+        /* ===== RESPONSIVE DESIGN ===== */
+        /* Mobile-friendly adjustments */
         @media (max-width: 768px) {
             .title {
-                font-size: 2.5rem;
+                font-size: 2.5rem; /* Smaller title on mobile */
             }
             
             .nav {
-                flex-direction: column;
+                flex-direction: column; /* Stack nav links vertically */
                 gap: 1rem;
             }
             
             .projects-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Single column on mobile */
             }
         }
 
-        /* Loading animation */
+        /* ===== LOADING SCREEN ===== */
+        /* Full-screen loading overlay */
         .loading {
-            position: fixed;
+            position: fixed; /* Cover entire screen */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0a0a;
+            background: #0a0a0a; /* Dark background */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            animation: fadeOut 1s ease-out 6s forwards;
+            z-index: 1000; /* Above everything else */
+            animation: fadeOut 1s ease-out 6s forwards; /* Fade out after 6s */
             overflow: hidden;
         }
 
+        /* Loading text styling */
         .loading-text {
             font-size: 2rem;
             color: #00ff41;
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 1.5s ease-in-out infinite; /* Pulsing animation */
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Above the matrix rain */
         }
 
-        /* Matrix Digital Rain */
+        /* ===== MATRIX DIGITAL RAIN FOR LOADING SCREEN ===== */
+        /* Container for the matrix rain effect on loading screen */
         .matrix-rain-container {
             position: absolute;
             top: 0;
@@ -291,33 +325,51 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: 1;
+            z-index: 1; /* Behind the loading text */
         }
 
+        /* Individual falling columns of matrix characters */
         .matrix-column {
             position: absolute;
-            top: -100%;
+            top: -100%; /* Start above the container */
             color: #00ff41;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
+            font-size: 16px; /* Increased from 14px to match background rain */
             line-height: 1.2;
-            white-space: pre;
-            animation: matrixFall 4s linear infinite;
-            text-shadow: 0 0 5px #00ff41;
+            white-space: pre; /* Preserve line breaks */
+            animation: matrixFall 4s linear infinite; /* Continuous falling animation */
+            text-shadow: 0 0 8px #00ff41; /* Enhanced glow effect to match background rain */
+            opacity: 0; /* Start invisible - will be animated in by JavaScript */
+            visibility: hidden; /* Ensure completely hidden initially */
         }
 
+        /* Matrix falling animation keyframes - more ephemeral */
         @keyframes matrixFall {
             0% {
-                transform: translateY(-100%);
-                opacity: 1;
+                transform: translateY(-100%); /* Start above */
+                opacity: 0; /* Start invisible */
+                visibility: visible; /* Make visible when animation starts */
+            }
+            5% {
+                opacity: 0.6; /* Fade in quickly but not fully */
+            }
+            20% {
+                opacity: 0.4; /* Reduce opacity for ephemeral effect */
+            }
+            80% {
+                opacity: 0.3; /* Keep low opacity */
+            }
+            95% {
+                opacity: 0.1; /* Fade out near the end */
             }
             100% {
-                transform: translateY(100vh);
-                opacity: 0;
+                transform: translateY(100vh); /* End below viewport */
+                opacity: 0; /* Completely fade out */
+                visibility: hidden; /* Hide again */
             }
         }
 
-        /* Position columns across the screen */
+        /* Position each column across the screen with different delays */
         .matrix-column:nth-child(1) { left: 5%; animation-delay: 0s; }
         .matrix-column:nth-child(2) { left: 15%; animation-delay: 0.2s; }
         .matrix-column:nth-child(3) { left: 25%; animation-delay: 0.4s; }
@@ -328,35 +380,39 @@
         .matrix-column:nth-child(8) { left: 75%; animation-delay: 1.4s; }
         .matrix-column:nth-child(9) { left: 85%; animation-delay: 1.6s; }
         .matrix-column:nth-child(10) { left: 95%; animation-delay: 1.8s; }
+        .matrix-column:nth-child(11) { left: 10%; animation-delay: 0.1s; }
+        .matrix-column:nth-child(12) { left: 20%; animation-delay: 0.3s; }
+        .matrix-column:nth-child(13) { left: 30%; animation-delay: 0.5s; }
+        .matrix-column:nth-child(14) { left: 40%; animation-delay: 0.7s; }
+        .matrix-column:nth-child(15) { left: 50%; animation-delay: 0.9s; }
 
-        /* Glitch effect for authenticity */
+        /* Glitch effect for authenticity - creates a duplicate with slight offset */
         .matrix-column::before {
-            content: attr(data-text);
+            content: attr(data-text); /* Use the same text as the column */
             position: absolute;
             top: 0;
             left: 0;
             color: #00ff41;
-            animation: glitch 0.3s infinite;
-            opacity: 0.6;
+            animation: glitch 0.3s infinite; /* Continuous glitch animation */
+            opacity: 0.2; /* Reduced from 0.4 to be more ephemeral */
+            text-shadow: 0 0 4px #00ff41; /* Subtle glow for glitch effect */
+            visibility: hidden; /* Start hidden */
         }
 
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(-1px, -1px); }
-            60% { transform: translate(1px, 1px); }
-            80% { transform: translate(1px, -1px); }
+        /* Make glitch effect visible when column becomes visible */
+        .matrix-column[style*="opacity"]::before {
+            visibility: visible;
         }
 
-        /* Loading text with ephemeral matrix style */
+        /* Enhanced loading text with ephemeral matrix style */
         .loading-text {
             font-family: 'Courier New', monospace;
             font-size: 1.6rem;
             color: #00ff41;
-            text-shadow: 0 0 15px #00ff41, 0 0 25px #00ff41;
-            animation: ephemeralPulse 3s ease-in-out infinite;
+            text-shadow: 0 0 15px #00ff41, 0 0 25px #00ff41; /* Double glow effect */
+            animation: ephemeralPulse 3s ease-in-out infinite; /* Ephemeral pulsing */
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Above the matrix rain */
             background: none;
             padding: 0;
             border: none;
@@ -364,6 +420,7 @@
             opacity: 0.9;
         }
 
+        /* Ephemeral pulse animation - more dramatic than regular pulse */
         @keyframes ephemeralPulse {
             0%, 100% {
                 opacity: 0.9;
@@ -375,6 +432,7 @@
             }
         }
 
+        /* Regular pulse animation for fallback */
         @keyframes pulse {
             0%, 100% {
                 opacity: 1;
@@ -384,67 +442,87 @@
             }
         }
 
+        /* Fade out animation for loading screen */
         @keyframes fadeOut {
             to {
                 opacity: 0;
-                visibility: hidden;
+                visibility: hidden; /* Completely hide after fade */
             }
         }
     </style>
+    <!-- Content Security Policy to prevent XSS attacks -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
 </head>
 <body>
-    <!-- Loading screen -->
+    <!-- ===== LOADING SCREEN ===== -->
+    <!-- Full-screen overlay that shows while the page loads -->
     <div class="loading">
+        <!-- Container for matrix rain effect - populated by JavaScript -->
         <div class="matrix-rain-container" id="matrixRainContainer">
             <!-- Matrix rain columns will be generated by JavaScript -->
         </div>
-        <div class="loading-text">...INITIALIZING MATRIX HUB...</div>
+        <!-- Loading text that pulses and fades -->
+        <div class="loading-text">... INITIALIZING MATRIX HUB ...</div>
     </div>
 
-    <!-- Matrix background -->
+    <!-- ===== MATRIX BACKGROUND ===== -->
+    <!-- Background matrix rain effect - different from loading screen -->
     <div class="matrix-bg" id="matrixBg"></div>
 
-    <!-- Header -->
+    <!-- ===== HEADER SECTION ===== -->
     <header class="header">
+        <!-- Main title - gets typing animation from JavaScript -->
         <h1 class="title">WELCOME TO THE MATRIX HUB</h1>
-        <p class="subtitle">...a digital realm of innovation...</p>
+        <!-- Subtitle with fade-in animation -->
+        <p class="subtitle">... a digital realm of innovation ...</p>
         
+
+        <!-- Navigation menu with smooth scrolling -->
         <nav class="nav">
             <a href="#about" class="nav-link">./ABOUT</a>
             <a href="#projects" class="nav-link">./SOFTWARES</a>
             <a href="#contact" class="nav-link">./CONTACT</a>
         </nav>
+        <p class="subtitle">              ¯\_(ツ)_/¯</p>
     </header>
 
-    <!-- Main content -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main class="main">
-        <!-- About Section -->
+        <!-- ===== ABOUT SECTION ===== -->
+        <!-- Uses same styling as projects section for consistency -->
         <section id="about" class="projects-section">
             <h2 class="section-title">./ABOUT</h2>
+            <!-- Grid layout for about cards -->
             <div class="projects-grid">
+                <!-- About card 1: Personal info -->
                 <div class="project-card">
-                    <h3 class="project-title">WHO AM I</h3>
+                    <h3 class="project-title">WHO</h3>
+                    <h3 class="project-title">(◡‿◡)</h3>
                     <p class="project-description">
                         A passionate developer who loves creating innovative solutions and exploring the boundaries of technology. 
-                        I specialize in web development, machine learning, and building user-centric applications that make a difference.
                     </p>
+                    <!-- Note: This is a div, not a link, so no hover effects -->
                     <div class="project-link">DEVELOPER • INNOVATOR • PROBLEM SOLVER</div>
                 </div>
 
+                <!-- About card 2: Skills/Technologies -->
                 <div class="project-card">
-                    <h3 class="project-title">SKILLS & TECHNOLOGIES</h3>
+                    <h3 class="project-title">TECH</h3>
+                    <h3 class="project-title">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</h3>
                     <p class="project-description">
-                        Frontend: React, Vue.js, TypeScript, CSS3, HTML5<br>
-                        Backend: Node.js, Python, SQL, NoSQL<br>
-                        DevOps: Docker, AWS, CI/CD, Git<br>
-                        AI/ML: TensorFlow, PyTorch, Scikit-learn
+                        <b>Frontend:</b> React, Vue.js, TypeScript, Tailwind<br>
+                        <b>Backend:</b> Node.js, Python, SQL, NoSQL<br>
+                        <b>Full Stack:</b> Next.js, MERN<br>
+                        <b>DevOps:</b> Docker, AWS, CI/CD, Git<br>
+                        <b>AI/ML:</b> TensorFlow, PyTorch, Scikit-learn
                     </p>
                     <div class="project-link">ALWAYS LEARNING • ALWAYS GROWING</div>
                 </div>
 
+                <!-- About card 3: Mission statement -->
                 <div class="project-card">
                     <h3 class="project-title">MISSION</h3>
+                    <h3 class="project-title">(◕ᴗ◕)</h3>
                     <p class="project-description">
                         To create technology that enhances human experience, solves real-world problems, 
                         and pushes the boundaries of what's possible in the digital realm.
@@ -454,33 +532,39 @@
             </div>
         </section>
 
-        <!-- Projects Section -->
+        <!-- ===== PROJECTS SECTION ===== -->
+        <!-- Showcases your software projects -->
         <section id="projects" class="projects-section">
             <h2 class="section-title">./SOFTWARES</h2>
             <div class="projects-grid">
-                <!-- Project Template 1 -->
+                <!-- Active project 1: OTTER -->
                 <div class="project-card">
-                    <h3 class="project-title">ALPHA</h3>
+                    <h3 class="project-title">OTTER 🦦</h3>
                     <p class="project-description">
                         A modern browser extension for managing your daily tasks with a playful otter theme!
                     </p>
+                    <!-- External link to project -->
                     <a href="https://tonsoffunn.github.io/todo-browser-ext/" class="project-link" target="_blank">
-                        EXPLORE SOFTWARE
+                        EXPLORE OTTER →
                     </a>
                 </div>
 
-                <!-- Project Template 2 -->
+                <!-- Active project 2: MEMERY -->
                 <div class="project-card">
-                    <h3 class="project-title">BETA</h3>
+                    <h3 class="project-title">MEMERY 🤣</h3>
                     <p class="project-description">
                         A powerful Discord bot that fetches memes from Reddit with advanced features and modern design.
                     </p>
                     <a href="https://tonsoffunn.github.io/discord-meme-fetcher-bot/" class="project-link" target="_blank">
-                        EXPLORE SOFTWARE
+                        EXPLORE MEMERY →
                     </a>
                 </div>
 
-                <!-- Project Template 3 -->
+                <!-- ===== COMMENTED OUT PROJECT TEMPLATES ===== -->
+                <!-- These are templates you can uncomment and customize for new projects -->
+                
+                <!-- Project Template 3: GAMMA (commented out) -->
+                <!--
                 <div class="project-card">
                     <h3 class="project-title">GAMMA</h3>
                     <p class="project-description">
@@ -490,8 +574,10 @@
                         EXPLORE SOFTWARE
                     </a>
                 </div>
+                -->
 
-                <!-- Project Template 4 -->
+                <!-- Project Template 4: DELTA (commented out) -->
+                <!--
                 <div class="project-card">
                     <h3 class="project-title">DELTA</h3>
                     <p class="project-description">
@@ -501,8 +587,10 @@
                         EXPLORE SOFTWARE
                     </a>
                 </div>
+                -->
 
-                <!-- Project Template 5 -->
+                <!-- Project Template 5: EPSILON (commented out) -->
+                <!--
                 <div class="project-card">
                     <h3 class="project-title">EPSILON</h3>
                     <p class="project-description">
@@ -512,8 +600,10 @@
                         EXPLORE SOFTWARE
                     </a>
                 </div>
+                -->
 
-                <!-- Project Template 6 -->
+                <!-- Project Template 6: ZETA (commented out) -->
+                <!--
                 <div class="project-card">
                     <h3 class="project-title">ZETA</h3>
                     <p class="project-description">
@@ -523,13 +613,16 @@
                         EXPLORE SOFTWARE
                     </a>
                 </div>
+                -->
             </div>
         </section>
 
-        <!-- Contact Section -->
+        <!-- ===== CONTACT SECTION ===== -->
+        <!-- Contact methods and social links -->
         <section id="contact" class="projects-section">
             <h2 class="section-title">./CONTACT</h2>
             <div class="projects-grid">
+                <!-- Contact card 1: GitHub -->
                 <div class="project-card">
                     <h3 class="project-title">GITHUB</h3>
                     <p class="project-description">
@@ -541,7 +634,8 @@
                     </a>
                 </div>
 
-                <div class="project-card">
+                <!-- Contact card 2: LinkedIn (commented out) -->
+                <!-- <div class="project-card">
                     <h3 class="project-title">LINKEDIN</h3>
                     <p class="project-description">
                         Connect with me professionally, view my experience, and stay updated 
@@ -550,20 +644,23 @@
                     <a href="#" class="project-link" target="_blank">
                         CONNECT ON LINKEDIN
                     </a>
-                </div>
+                </div> -->
 
+                <!-- Contact card 3: Email -->
                 <div class="project-card">
                     <h3 class="project-title">EMAIL</h3>
                     <p class="project-description">
                         Ready to collaborate on exciting projects? Have questions about my work? 
                         Let's discuss opportunities and ideas that could change the world.
                     </p>
+                    <!-- Mailto link opens default email client -->
                     <a href="mailto:contact@example.com" class="project-link">
                         SEND MESSAGE
                     </a>
                 </div>
 
-                <div class="project-card">
+                <!-- Contact card 4: Twitter (commented out) -->
+                <!-- <div class="project-card">
                     <h3 class="project-title">TWITTER</h3>
                     <p class="project-description">
                         Follow my thoughts on technology, development insights, and occasional 
@@ -572,19 +669,9 @@
                     <a href="#" class="project-link" target="_blank">
                         FOLLOW ON TWITTER
                     </a>
-                </div>
+                </div> -->
 
-                <div class="project-card">
-                    <h3 class="project-title">PORTFOLIO</h3>
-                    <p class="project-description">
-                        A comprehensive showcase of my best work, detailed case studies, 
-                        and the stories behind the projects that define my journey.
-                    </p>
-                    <a href="#" class="project-link" target="_blank">
-                        VIEW PORTFOLIO
-                    </a>
-                </div>
-
+                <!-- Contact card 5: Blog -->
                 <div class="project-card">
                     <h3 class="project-title">BLOG</h3>
                     <p class="project-description">
@@ -599,131 +686,188 @@
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <p class="footer-text">
             © 2025 Matrix Hub | Built with ❤️ by TonsOfFunn
         </p>
     </footer>
 
+    <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // Matrix rain effect
+        // ===== MATRIX RAIN EFFECT FOR BACKGROUND =====
+        // Creates the subtle falling characters in the background
         function createMatrixRain() {
-            const matrixBg = document.getElementById('matrixBg');
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+            const matrixBg = document.getElementById('matrixBg'); // Get the background container
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // Matrix characters including Japanese
             
+            // Function to create a single falling character
             function createChar() {
-                const char = document.createElement('div');
-                char.className = 'matrix-char';
-                char.textContent = chars[Math.floor(Math.random() * chars.length)];
-                char.style.left = Math.random() * 100 + '%';
-                char.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                char.style.animationDelay = Math.random() * 2 + 's';
+                const char = document.createElement('div'); // Create new div element
+                char.className = 'matrix-char'; // Apply matrix character styling
+                char.textContent = chars[Math.floor(Math.random() * chars.length)]; // Random character
+                char.style.left = Math.random() * 100 + '%'; // Random horizontal position
+                char.style.animationDuration = (Math.random() * 4 + 3) + 's'; // Random fall speed (3-7s) - slower for more visibility
+                char.style.animationDelay = Math.random() * 1 + 's'; // Random start delay (0-1s)
+                char.style.opacity = Math.random() * 0.5 + 0.5; // Random opacity (0.5-1.0) for varied visibility
                 
-                matrixBg.appendChild(char);
+                matrixBg.appendChild(char); // Add to background container
                 
-                // Remove character after animation
+                // Remove character after animation completes to prevent memory leaks
                 setTimeout(() => {
                     if (char.parentNode) {
                         char.parentNode.removeChild(char);
                     }
-                }, 5000);
+                }, 8000); // Increased from 5000 to 8000 to match longer animation duration
             }
             
-            // Create characters periodically
-            setInterval(createChar, 100);
+            // Create new characters more frequently (every 50ms instead of 100ms)
+            setInterval(createChar, 50);
             
-            // Initial characters
-            for (let i = 0; i < 20; i++) {
-                setTimeout(createChar, i * 50);
+            // Create more initial characters
+            for (let i = 0; i < 40; i++) { // Increased from 20 to 40
+                setTimeout(createChar, i * 25); // Stagger initial characters more densely
             }
         }
 
-        // Matrix Digital Rain for Loading Screen
+        // ===== MATRIX DIGITAL RAIN FOR LOADING SCREEN =====
+        // Creates the more dramatic matrix rain effect on the loading screen
         function createMatrixDigitalRain() {
-            const container = document.getElementById('matrixRainContainer');
+            const container = document.getElementById('matrixRainContainer'); // Get loading screen container
             const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
             
             // Clear any existing content
             container.innerHTML = '';
             
-            // Create 10 columns of falling characters
-            for (let i = 0; i < 10; i++) {
+            // Create 15 columns of falling characters (increased from 11 for more density)
+            for (let i = 0; i < 15; i++) {
                 const column = document.createElement('div');
-                column.className = 'matrix-column';
+                column.className = 'matrix-column'; // Apply column styling
                 
                 // Generate random characters for this column
                 let columnText = '';
-                for (let j = 0; j < 30; j++) {
+                for (let j = 0; j < 40; j++) { // Increased from 30 to 40 characters per column
                     columnText += matrixChars[Math.floor(Math.random() * matrixChars.length)] + '\n';
                 }
                 
-                column.textContent = columnText;
-                column.setAttribute('data-text', columnText);
+                column.textContent = columnText; // Set the visible text
+                column.setAttribute('data-text', columnText); // Set data attribute for glitch effect
                 
-                container.appendChild(column);
+                // Ensure columns start completely hidden
+                column.style.opacity = '0';
+                column.style.visibility = 'hidden';
+                
+                container.appendChild(column); // Add to container
             }
+            
+            // Animate columns in with staggered timing - more ephemeral effect
+            setTimeout(() => {
+                const columns = container.querySelectorAll('.matrix-column');
+                columns.forEach((column, index) => {
+                    setTimeout(() => {
+                        // Make column visible and set random opacity for ephemeral effect
+                        column.style.visibility = 'visible';
+                        column.style.opacity = (Math.random() * 0.4 + 0.2).toString(); // Random opacity between 0.2-0.6 for ephemeral look
+                    }, index * 100); // Increased stagger to 100ms for more dramatic effect
+                });
+            }, 1000); // Start animation after 1 second
             
             console.log('Matrix digital rain created with', container.children.length, 'columns');
         }
 
-        // Initialize Matrix digital rain on loading screen
+        // ===== INITIALIZATION =====
+        // Set up everything when the page loads
         window.addEventListener('load', () => {
-            createMatrixDigitalRain();
+            // Reset scroll position to top immediately
+            window.scrollTo(0, 0);
+            
+            createMatrixDigitalRain(); // Start loading screen matrix rain immediately
             
             // Start background matrix rain after loading screen fades
             setTimeout(createMatrixRain, 7000); // 6s loading + 1s fade = 7s total
+            
+            // Ensure page stays at top after loading screen fades
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 7000); // After loading screen completes
         });
 
-        // Smooth scrolling for navigation links
+        // ===== PAGE RELOAD HANDLING =====
+        // Handle page reload and ensure scroll position resets
+        window.addEventListener('beforeunload', () => {
+            // Store a flag that page is being reloaded
+            sessionStorage.setItem('pageReloaded', 'true');
+        });
+
+        // Check if page was reloaded and ensure proper scroll position
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted || sessionStorage.getItem('pageReloaded')) {
+                // Page was reloaded or restored from cache
+                window.scrollTo(0, 0);
+                sessionStorage.removeItem('pageReloaded'); // Clear the flag
+            }
+        });
+
+        // Additional scroll reset for various reload scenarios
+        document.addEventListener('DOMContentLoaded', () => {
+            // Reset scroll on DOM ready
+            window.scrollTo(0, 0);
+        });
+
+        // ===== SMOOTH SCROLLING =====
+        // Makes navigation links scroll smoothly to sections
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                e.preventDefault(); // Prevent default jump behavior
+                const target = document.querySelector(this.getAttribute('href')); // Get target section
                 if (target) {
                     target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                        behavior: 'smooth', // Smooth scrolling
+                        block: 'start' // Align to top of viewport
                     });
                 }
             });
         });
 
-        // Add hover effects to project cards
+        // ===== PROJECT CARD HOVER EFFECTS =====
+        // Adds enhanced hover effects to project cards
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
+                this.style.transform = 'translateY(-5px) scale(1.02)'; // Lift and slightly enlarge
             });
             
             card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+                this.style.transform = 'translateY(0) scale(1)'; // Return to normal
             });
         });
 
-        // Add typing effect to title
+        // ===== TYPING EFFECT =====
+        // Creates a typewriter effect for the main title
         function typeWriter(element, text, speed = 100) {
             let i = 0;
-            element.textContent = '';
-            element.style.opacity = '1';
+            element.textContent = ''; // Clear the text
+            element.style.opacity = '1'; // Make visible
             element.style.transition = 'opacity 0.5s ease-in';
             
+            // Recursive function to type each character
             function type() {
                 if (i < text.length) {
-                    element.textContent += text.charAt(i);
+                    element.textContent += text.charAt(i); // Add next character
                     i++;
-                    setTimeout(type, speed);
+                    setTimeout(type, speed); // Wait before next character
                 }
             }
             
-            type();
+            type(); // Start typing
         }
 
-        // Initialize typing effect after loading
+        // ===== TITLE TYPING ANIMATION =====
+        // Initialize typing effect after loading screen
         setTimeout(() => {
-            const title = document.querySelector('.title');
-            const originalText = title.textContent;
-            typeWriter(title, originalText, 150);
-        }, 7500);
+            const title = document.querySelector('.title'); // Get the main title
+            const originalText = title.textContent; // Store original text
+            typeWriter(title, originalText, 150); // Start typing with 150ms delay
+        }, 7500); // Wait 7.5s for loading screen to complete
     </script>
 </body>
 </html> 
