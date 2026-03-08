@@ -23,15 +23,21 @@
         }
 
         /* ===== MATRIX RAIN BACKGROUND ===== */
-        /* Container for the falling matrix characters in the background */
         .matrix-bg {
-            position: fixed; /* Fixed position so it stays in place when scrolling */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0; /* Changed from -1 to 0 to be behind content but more visible */
-            opacity: 0.3; /* Increased from 0.1 to 0.3 for more pronounced effect */
+            z-index: 0;
+            opacity: 0.3;
+            visibility: hidden;
+            display: none; /* Fully hidden until loading is done - no paint at all */
+        }
+
+        .matrix-bg.visible {
+            display: block;
+            visibility: visible;
         }
 
         /* Individual falling matrix characters */
@@ -90,7 +96,7 @@
             color: #00cc33; /* Slightly darker green */
             margin-bottom: 2rem;
             opacity: 0; /* Start invisible */
-            animation: fadeInUp 1s ease-out 7.5s forwards; /* Animate in after 7.5s */
+            animation: fadeInUp 1s ease-out 3.5s forwards; /* Animate in after 3s loading */
         }
 
         /* Fade in animation from bottom */
@@ -109,7 +115,7 @@
             gap: 2rem; /* Space between nav links */
             margin-bottom: 3rem;
             opacity: 0; /* Start invisible */
-            animation: fadeInUp 1s ease-out 8s forwards; /* Animate in after 8s */
+            animation: fadeInUp 1s ease-out 4s forwards; /* Animate in after loading */
         }
 
         /* Individual navigation links */
@@ -161,7 +167,7 @@
         .projects-section {
             margin: 4rem 0; /* Vertical spacing between sections */
             opacity: 0; /* Start invisible */
-            animation: fadeInUp 1s ease-out 8.5s forwards; /* Animate in after 8.5s */
+            animation: fadeInUp 1s ease-out 4.5s forwards; /* Animate in after loading */
         }
 
         /* Section titles */
@@ -265,7 +271,7 @@
             margin-top: 4rem;
             border-top: 1px solid #00ff41; /* Green top border */
             opacity: 0; /* Start invisible */
-            animation: fadeInUp 1s ease-out 9s forwards; /* Animate in after 9s */
+            animation: fadeInUp 1s ease-out 5s forwards; /* Animate in after loading */
         }
 
         /* Footer text styling */
@@ -303,7 +309,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000; /* Above everything else */
-            animation: fadeOut 1s ease-out 6s forwards; /* Fade out after 6s */
+            animation: fadeOut 1s ease-out 2s forwards; /* Fade out after 2s (3s total: 2s visible + 1s fade) */
             overflow: hidden;
         }
 
@@ -334,21 +340,22 @@
             top: -100%; /* Start above the container */
             color: #00ff41;
             font-family: 'Courier New', monospace;
-            font-size: 16px; /* Increased from 14px to match background rain */
+            font-size: 16px;
             line-height: 1.2;
-            white-space: pre; /* Preserve line breaks */
-            animation: matrixFall 4s linear infinite; /* Continuous falling animation */
-            text-shadow: 0 0 8px #00ff41; /* Enhanced glow effect to match background rain */
-            opacity: 0; /* Start invisible - will be animated in by JavaScript */
-            visibility: hidden; /* Ensure completely hidden initially */
+            white-space: pre;
+            animation: matrixFall 4s linear infinite;
+            text-shadow: 0 0 8px #00ff41;
+            opacity: 0;
+            visibility: hidden;
+            animation-play-state: paused; /* Don't run until JS reveals - prevents keyframe from ever showing column early */
         }
 
-        /* Matrix falling animation keyframes - more ephemeral */
+        /* Matrix falling animation keyframes - do NOT set visibility: visible here;
+           columns are only revealed by JS at 1s so they never flash at wrong position */
         @keyframes matrixFall {
             0% {
                 transform: translateY(-100%); /* Start above */
-                opacity: 0; /* Start invisible */
-                visibility: visible; /* Make visible when animation starts */
+                opacity: 0;
             }
             5% {
                 opacity: 0.6; /* Fade in quickly but not fully */
@@ -364,45 +371,29 @@
             }
             100% {
                 transform: translateY(100vh); /* End below viewport */
-                opacity: 0; /* Completely fade out */
-                visibility: hidden; /* Hide again */
+                opacity: 0;
             }
         }
 
         /* Position each column across the screen with different delays */
         .matrix-column:nth-child(1) { left: 5%; animation-delay: 0s; }
-        .matrix-column:nth-child(2) { left: 15%; animation-delay: 0.2s; }
-        .matrix-column:nth-child(3) { left: 25%; animation-delay: 0.4s; }
-        .matrix-column:nth-child(4) { left: 35%; animation-delay: 0.6s; }
-        .matrix-column:nth-child(5) { left: 45%; animation-delay: 0.8s; }
-        .matrix-column:nth-child(6) { left: 55%; animation-delay: 1s; }
-        .matrix-column:nth-child(7) { left: 65%; animation-delay: 1.2s; }
-        .matrix-column:nth-child(8) { left: 75%; animation-delay: 1.4s; }
-        .matrix-column:nth-child(9) { left: 85%; animation-delay: 1.6s; }
-        .matrix-column:nth-child(10) { left: 95%; animation-delay: 1.8s; }
-        .matrix-column:nth-child(11) { left: 10%; animation-delay: 0.1s; }
-        .matrix-column:nth-child(12) { left: 20%; animation-delay: 0.3s; }
-        .matrix-column:nth-child(13) { left: 30%; animation-delay: 0.5s; }
-        .matrix-column:nth-child(14) { left: 40%; animation-delay: 0.7s; }
-        .matrix-column:nth-child(15) { left: 50%; animation-delay: 0.9s; }
-
-        /* Glitch effect for authenticity - creates a duplicate with slight offset */
-        .matrix-column::before {
-            content: attr(data-text); /* Use the same text as the column */
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: #00ff41;
-            animation: glitch 0.3s infinite; /* Continuous glitch animation */
-            opacity: 0.2; /* Reduced from 0.4 to be more ephemeral */
-            text-shadow: 0 0 4px #00ff41; /* Subtle glow for glitch effect */
-            visibility: hidden; /* Start hidden */
-        }
-
-        /* Make glitch effect visible when column becomes visible */
-        .matrix-column[style*="opacity"]::before {
-            visibility: visible;
-        }
+        .matrix-column:nth-child(2) { left: 10%; animation-delay: 0.2s; }
+        .matrix-column:nth-child(3) { left: 15%; animation-delay: 0.4s; }
+        .matrix-column:nth-child(4) { left: 20%; animation-delay: 0.6s; }
+        .matrix-column:nth-child(5) { left: 25%; animation-delay: 0.8s; }
+        .matrix-column:nth-child(6) { left: 30%; animation-delay: 1s; }
+        .matrix-column:nth-child(7) { left: 35%; animation-delay: 1.2s; }
+        .matrix-column:nth-child(8) { left: 40%; animation-delay: 1.4s; }
+        .matrix-column:nth-child(9) { left: 45%; animation-delay: 1.6s; }
+        .matrix-column:nth-child(10) { left: 50%; animation-delay: 1.8s; }
+        .matrix-column:nth-child(11) { left: 55%; animation-delay: 2.0s; }
+        .matrix-column:nth-child(12) { left: 60%; animation-delay: 2.2s; }
+        .matrix-column:nth-child(13) { left: 70%; animation-delay: 2.4s; }
+        .matrix-column:nth-child(14) { left: 75%; animation-delay: 2.6s; }
+        .matrix-column:nth-child(15) { left: 80%; animation-delay: 2.8s; }
+        .matrix-column:nth-child(16) { left: 85%; animation-delay: 3.0s; }
+        .matrix-column:nth-child(17) { left: 90%; animation-delay: 3.2s; }
+        .matrix-column:nth-child(18) { left: 95%; animation-delay: 3.4s; }
 
         /* Enhanced loading text with ephemeral matrix style */
         .loading-text {
@@ -472,7 +463,7 @@
     <!-- ===== HEADER SECTION ===== -->
     <header class="header">
         <!-- Main title - gets typing animation from JavaScript -->
-        <h1 class="title">WELCOME TO THE HUB</h1>
+        <h1 class="title">WELCOME TO THE TINKERARIUM</h1>
         <!-- Subtitle with fade-in animation -->
         <p class="subtitle">... a digital realm of innovation ...</p>
         
@@ -580,9 +571,6 @@
                         USE IMAGE RESCALER →
                     </a>
                 </div>
-
-                <!-- ===== COMMENTED OUT PROJECT TEMPLATES ===== -->
-                <!-- These are templates you can uncomment and customize for new projects -->
                 
                 <!-- Project Template 3: GAMMA (commented out) -->
                 <!--
@@ -597,44 +585,6 @@
                 </div>
                 -->
 
-                <!-- Project Template 4: DELTA (commented out) -->
-                <!--
-                <div class="project-card">
-                    <h3 class="project-title">DELTA</h3>
-                    <p class="project-description">
-                        A machine learning interface with intuitive controls and powerful computational capabilities.
-                    </p>
-                    <a href="https://project-delta.yourusername.github.io" class="project-link" target="_blank">
-                        EXPLORE SOFTWARE
-                    </a>
-                </div>
-                -->
-
-                <!-- Project Template 5: EPSILON (commented out) -->
-                <!--
-                <div class="project-card">
-                    <h3 class="project-title">EPSILON</h3>
-                    <p class="project-description">
-                        A blockchain-based application demonstrating decentralized technology and secure transactions.
-                    </p>
-                    <a href="https://project-epsilon.yourusername.github.io" class="project-link" target="_blank">
-                        EXPLORE SOFTWARE
-                    </a>
-                </div>
-                -->
-
-                <!-- Project Template 6: ZETA (commented out) -->
-                <!--
-                <div class="project-card">
-                    <h3 class="project-title">ZETA</h3>
-                    <p class="project-description">
-                        A mobile-first progressive web app with offline capabilities and native-like performance.
-                    </p>
-                    <a href="https://project-zeta.yourusername.github.io" class="project-link" target="_blank">
-                        EXPLORE SOFTWARE
-                    </a>
-                </div>
-                -->
             </div>
         </section>
 
@@ -720,6 +670,7 @@
         // Creates the subtle falling characters in the background
         function createMatrixRain() {
             const matrixBg = document.getElementById('matrixBg'); // Get the background container
+            matrixBg.classList.add('visible'); // Show background only when we start rain (after loading is done)
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // Matrix characters including Japanese
             
             // Function to create a single falling character
@@ -752,48 +703,42 @@
         }
 
         // ===== MATRIX DIGITAL RAIN FOR LOADING SCREEN =====
-        // Creates the more dramatic matrix rain effect on the loading screen
+        // Creates the loading screen matrix rain. Columns are created only after 1s so nothing can flash before then.
         function createMatrixDigitalRain() {
-            const container = document.getElementById('matrixRainContainer'); // Get loading screen container
+            const container = document.getElementById('matrixRainContainer');
             const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            
-            // Clear any existing content
-            container.innerHTML = '';
-            
-            // Create 15 columns of falling characters (increased from 11 for more density)
-            for (let i = 0; i < 15; i++) {
-                const column = document.createElement('div');
-                column.className = 'matrix-column'; // Apply column styling
-                
-                // Generate random characters for this column
-                let columnText = '';
-                for (let j = 0; j < 40; j++) { // Increased from 30 to 40 characters per column
-                    columnText += matrixChars[Math.floor(Math.random() * matrixChars.length)] + '\n';
-                }
-                
-                column.textContent = columnText; // Set the visible text
-                column.setAttribute('data-text', columnText); // Set data attribute for glitch effect
-                
-                // Ensure columns start completely hidden
-                column.style.opacity = '0';
-                column.style.visibility = 'hidden';
-                
-                container.appendChild(column); // Add to container
-            }
-            
-            // Animate columns in with staggered timing - more ephemeral effect
+
+            // Don't create any columns until 1s - keeps container empty so no artifacts can appear before the intended rain
             setTimeout(() => {
+                container.innerHTML = '';
+
+                for (let i = 0; i < 18; i++) {
+                    const column = document.createElement('div');
+                    column.className = 'matrix-column';
+
+                    let columnText = '';
+                    for (let j = 0; j < 40; j++) {
+                        columnText += matrixChars[Math.floor(Math.random() * matrixChars.length)] + '\n';
+                    }
+
+                    column.textContent = columnText;
+                    column.setAttribute('data-text', columnText);
+                    column.style.opacity = '0';
+                    column.style.visibility = 'hidden';
+
+                    container.appendChild(column);
+                }
+
+                // Reveal columns left-to-right and start their animation
                 const columns = container.querySelectorAll('.matrix-column');
                 columns.forEach((column, index) => {
                     setTimeout(() => {
-                        // Make column visible and set random opacity for ephemeral effect
                         column.style.visibility = 'visible';
-                        column.style.opacity = (Math.random() * 0.4 + 0.2).toString(); // Random opacity between 0.2-0.6 for ephemeral look
-                    }, index * 100); // Increased stagger to 100ms for more dramatic effect
+                        column.style.opacity = (Math.random() * 0.4 + 0.2).toString();
+                        column.style.animationPlayState = 'running'; /* Start fall only when we reveal */
+                    }, index * 100);
                 });
-            }, 1000); // Start animation after 1 second
-            
-            console.log('Matrix digital rain created with', container.children.length, 'columns');
+            }, 1000);
         }
 
         // ===== INITIALIZATION =====
@@ -801,16 +746,17 @@
         window.addEventListener('load', () => {
             // Reset scroll position to top immediately
             window.scrollTo(0, 0);
-            
-            createMatrixDigitalRain(); // Start loading screen matrix rain immediately
-            
-            // Start background matrix rain after loading screen fades
-            setTimeout(createMatrixRain, 7000); // 6s loading + 1s fade = 7s total
-            
+
+            // Loading screen shows only "... INITIALIZING ..." text (no rain) to avoid artifacts.
+            // createMatrixDigitalRain() removed - column-based rain was causing visible artifacts.
+
+            // Start background matrix rain only after loading overlay has fully faded
+            setTimeout(createMatrixRain, 4000); // After 3s loading (2s visible + 1s fade)
+
             // Ensure page stays at top after loading screen fades
             setTimeout(() => {
                 window.scrollTo(0, 0);
-            }, 7000); // After loading screen completes
+            }, 4000); // After loading screen completes (3s total)
         });
 
         // ===== PAGE RELOAD HANDLING =====
@@ -887,8 +833,8 @@
         setTimeout(() => {
             const title = document.querySelector('.title'); // Get the main title
             const originalText = title.textContent; // Store original text
-            typeWriter(title, originalText, 150); // Start typing with 150ms delay
-        }, 7500); // Wait 7.5s for loading screen to complete
+            typeWriter(title, originalText, 100); // Start typing with 100ms per character
+        }, 4000); // Wait for 3s loading screen to complete
     </script>
 </body>
 </html> 
